@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "functions": {
+    "api/main.go": {
+      "maxDuration": 5
+    }
+  },
+  "routes": [
+    { "src": "/api", "dest": "api/main.go" },
+    { "src": "/css/(.*)", "dest": "dist/css/$1" },
+    { "src": "/js/(.*)", "dest": "dist/js/$1" },
+    { "src": "/", "dest": "dist/index.html" },
+    { "src": "/(.*)", "dest": "dist/index.html" }
+  ]
+}
