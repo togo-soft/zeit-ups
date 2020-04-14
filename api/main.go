@@ -141,7 +141,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		response, _ = json.Marshal(&Response{
 			Code:    200,
 			Message: "ok",
-			Data:    path + dst,
+			Data:    conf.Domain + path + dst,
 		})
 	} else if operate == "mkdir" {
 		var dir = r.URL.Query().Get("dir")
