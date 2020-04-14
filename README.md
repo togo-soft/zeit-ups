@@ -1,8 +1,8 @@
 ## zeit-UpsGo
 
-UpsGo是一个基于 Go+Vue 开发的又拍云对象存储服务管理应用。
+[UpsGo](https://github.com/xuthus5/UpsGo)是一个基于 Go+Vue 开发的又拍云对象存储服务管理应用。
 
-该项目用于直接以函数服务部署UpsGo项目而无需任何其他操作。
+该项目用于直接以函数服务部署[UpsGo](https://github.com/xuthus5/UpsGo)项目而无需任何其他操作。
 
 使用前请克隆或分叉该项目, 修改`api/main.go`文件下的第12行
 
@@ -25,6 +25,6 @@ var conf = &Ups{
 3. 通过 `now` CLI 直接部署项目 (如果你没有该命令, 运行 `npm install -g now` 安装)
 4. 若不希望使用 `now` CLI部署, 请通过zeit面板从你的github项目导入Fork的项目
 
-单击按钮直接部署(由于配置信息未填写, 部署或将无法工作).
+单击按钮直接部署(由于配置信息未填写, 部署或将无法工作, 但是你可以尝试了解ZEIT的工作流程).
 
 [![Deploy to now](https://deploy.now.sh/static/button.svg)](https://zeit.co/new/project?template=xuthus5/zeit-upsgo)

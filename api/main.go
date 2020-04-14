@@ -8,13 +8,18 @@ import (
 	"github.com/upyun/go-sdk/upyun"
 )
 
-// conf 是又拍云配置项
-var conf = &Ups{
-	Bucket:   "", //Bucket名称
-	Operator: "", //被授权的操作员名称
-	Password: "", //被授权的操作元密码
-	Domain:   "", //加速域名
-}
+var (
+	// conf 是又拍云配置项
+	conf = &Ups{
+		Bucket:   "", //Bucket名称
+		Operator: "", //被授权的操作员名称
+		Password: "", //被授权的操作元密码
+		Domain:   "", //加速域名
+	}
+
+	// response 响应内容
+	response []byte
+)
 
 // Ups Upyun 配置
 type Ups struct {
@@ -60,7 +65,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		if path == "" {
 			path = "/"
 		}
-
 		objsChan := make(chan *upyun.FileInfo, 10)
 		go func() {
 			up.List(&upyun.GetObjectsConfig{
@@ -68,24 +72,17 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 				ObjectsChan: objsChan,
 			})
 		}()
-
 		var list []*upyun.FileInfo
-
 		for obj := range objsChan {
 			list = append(list, obj)
 		}
-
 		//返回信息
-		response, _ := json.Marshal(&List{
+		response, _ = json.Marshal(&List{
 			Code:    200,
 			Message: conf.Domain,
 			Data:    list,
 			Count:   len(list),
 		})
-
-		w.Header().Set("Content-Length", strconv.Itoa(len(string(response))))
-		_, _ = w.Write(response)
-		return
 	} else if operate == "delete" {
 		//需要删除的文件绝对路径
 		var path = r.URL.Query().Get("path")
@@ -103,13 +100,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			_, _ = w.Write(response)
 			return
 		}
-		response, _ := json.Marshal(&Response{
+		response, _ = json.Marshal(&Response{
 			Code:    200,
 			Message: "ok",
 		})
-		w.Header().Set("Content-Length", strconv.Itoa(len(string(response))))
-		_, _ = w.Write(response)
-		return
 	} else if operate == "upload" {
 		var _, header, err = r.FormFile("file")
 		var path string
@@ -144,14 +138,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			_, _ = w.Write(response)
 			return
 		}
-		response, _ := json.Marshal(&Response{
+		response, _ = json.Marshal(&Response{
 			Code:    200,
 			Message: "ok",
 			Data:    path + dst,
 		})
-		w.Header().Set("Content-Length", strconv.Itoa(len(string(response))))
-		_, _ = w.Write(response)
-		return
 	} else if operate == "mkdir" {
 		var dir = r.URL.Query().Get("dir")
 		if err := up.Mkdir(dir); err != nil {
@@ -163,20 +154,17 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			_, _ = w.Write(response)
 			return
 		}
-		response, _ := json.Marshal(&Response{
+		response, _ = json.Marshal(&Response{
 			Code:    200,
 			Message: "ok",
 		})
-		w.Header().Set("Content-Length", strconv.Itoa(len(string(response))))
-		_, _ = w.Write(response)
-		return
 	} else if operate == "domain" {
-		response, _ := json.Marshal(&Response{
+		response, _ = json.Marshal(&Response{
 			Code:    200,
 			Message: conf.Domain,
 		})
-		w.Header().Set("Content-Length", strconv.Itoa(len(string(response))))
-		_, _ = w.Write(response)
-		return
 	}
+	w.Header().Set("Content-Length", strconv.Itoa(len(string(response))))
+	_, _ = w.Write(response)
+	return
 }
